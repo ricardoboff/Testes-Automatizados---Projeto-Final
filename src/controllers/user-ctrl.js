@@ -17,8 +17,11 @@ class UserController {
             const { id } = await UserService.createUser({ name, email, password })
 
             return res.status(200).json({ id })
-        } catch (error) { 
-            return res.status(error.status || 500).json(error.message || 'Server Error')
+        } catch (error) {
+            if(!error.status) {
+                return res.status(500).json({message: 'Server Error'})
+            }
+            return res.status(error.status).json(error.message)
         }
     }
 
